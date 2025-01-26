@@ -53,7 +53,7 @@ The categorizer uses a **Naive Bayes Gaussian model** to classify transactions. 
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/finance-TransactionCategorizer.git
+   git clone https://github.com/Foxel05/Finance-TransactionCategorizer.git
    cd finance-TransactionCategorizer
    ```
 2. **Install Dependencies**:
@@ -116,10 +116,10 @@ finance-TransactionCategorizer/
     ```
 
 ### Customizing Categories
-    Categories are dynamically added based on user input. To predefine categories, modify the initializeUser method in backend.php.
+  Categories are dynamically added based on user input. To predefine categories, modify the initializeUser method in backend.php.
 
 ### Modifying the Model
-    The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
+  The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
 
 ---
 
