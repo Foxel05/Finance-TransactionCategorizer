@@ -130,14 +130,20 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 3. Commit your changes and push to your fork.
 4. Submit a pull request with a detailed description of your changes.
 
+---
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
 
 ## Acknowledgments
 
 - [Niiknow/Bayes](https://github.com/niiknow/bayes) for the Naive Bayes implementation.
 - [Tailwind CSS](https://tailwindcss.com/) and [Flowbite](https://flowbite.com/) for the frontend design.
+
+---
 
 ## Contact
 
