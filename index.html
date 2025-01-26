@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transaction Categorizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-800">Bank Transaction Categorizer</h1>
+            <p class="text-gray-600 mt-2">Automatically categorize your bank transactions with AI.</p>
+        </header>
+
+        <!-- User Selection -->
+        <div class="mb-6 bg-white p-4 rounded-lg shadow-sm">
+            <label for="userSelect" class="block text-sm font-medium text-gray-700">Select User</label>
+            <select id="userSelect" class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="user1">User 1</option>
+                <option value="user2">User 2</option>
+            </select>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Left Side: Input Form -->
+            <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Categorize a Transaction</h2>
+                <form id="transactionForm">
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Transaction Description</label>
+                        <input type="text" id="description" placeholder="e.g., Amazon purchase 123"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button type="button" onclick="predictCategory()"
+                        class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                        Predict Category
+                    </button>
+                </form>
+
+                <!-- Prediction Result -->
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-gray-700">Predicted Category:</p>
+                    <p id="predictedCategory" class="text-xl font-semibold text-blue-800">-</p>
+                    <p class="text-gray-700 mt-2">Probabilities:</p>
+                    <pre id="probabilities" class="text-sm text-gray-600 bg-white p-2 rounded-lg border border-gray-200"></pre>
+                </div>
+
+                <!-- Training Section -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Train the Model</h3>
+                    <div class="mb-4">
+                        <label for="correctCategory" class="block text-sm font-medium text-gray-700">Correct Category</label>
+                        <input type="text" id="correctCategory" placeholder="e.g., Shopping"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button type="button" onclick="trainModel()"
+                        class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300">
+                        Train Model
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Information Panel -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">How It Works</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">1</span>
+                        <p class="text-gray-600">Enter a transaction description to predict its category using the AI model.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">2</span>
+                        <p class="text-gray-600">If the prediction is incorrect, provide the correct category and train the model to improve its accuracy.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">3</span>
+                        <p class="text-gray-600">The model learns from your corrections and updates its predictions dynamically.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">4</span>
+                        <p class="text-gray-600">Use the transaction history table to review, edit, or update categories in bulk.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-2 mr-3">5</span>
+                        <p class="text-gray-600">Retrain the model periodically to ensure it adapts to new patterns in your transactions.</p>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Tips</h3>
+                    <ul class="list-disc list-inside text-gray-600">
+                        <li>Use clear and concise descriptions for better predictions.</li>
+                        <li>Train the model regularly to improve its accuracy over time.</li>
+                        <li>Categories are dynamic and can be updated as needed.</li>
+                        <li>Use the search bar to quickly find specific transactions.</li>
+                        <li>Save all changes after editing categories to update the model.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Table -->
+        <div class="mt-8 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Transaction History</h2>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <!-- Search Input -->
+                <div class="pb-4">
+                    <label for="table-search" class="sr-only">Search</label>
+                    <div class="relative mt-1">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-200 rounded-lg w-80 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search transactions...">
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Description</th>
+                            <th scope="col" class="px-6 py-3">Category</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <!-- Rows will be dynamically populated here -->
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav class="flex items-center justify-between pt-4" aria-label="Table navigation">
+                    <span class="text-sm font-normal text-gray-500">Showing <span id="pagination-start">1</span>-<span id="pagination-end">10</span> of <span id="pagination-total">0</span></span>
+                    <ul class="inline-flex -space-x-px">
+                        <li>
+                            <button id="prevPage" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">Previous</button>
+                        </li>
+                        <li>
+                            <button id="nextPage" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">Next</button>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Save Button -->
+                <div class="mt-4">
+                    <button type="button" onclick="saveAllChanges()"
+                        class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                        Save All Changes
+                    </button>
+                </div>
+
+                <!-- Retrain Button -->
+                <div class="mt-4">
+                    <button type="button" onclick="retrainModel()"
+                        class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                        Retrain Model
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Pagination and state management
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        let changes = {};
+        let currentUserId = 'user1';
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            currentUserId = document.getElementById('userSelect').value;
+            renderTable();
+        });
+
+        // User selection handler
+        document.getElementById('userSelect').addEventListener('change', () => {
+            currentUserId = document.getElementById('userSelect').value;
+            currentPage = 1;
+            changes = {};
+            renderTable();
+        });
+
+        // Fetch transactions from backend
+        async function fetchTransactions(userId) {
+            try {
+                const response = await fetch('backend.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'getTransactions', 
+                        userId 
+                    })
+                });
+                const result = await response.json();
+                return result.transactions || [];
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+                return [];
+            }
+        }
+
+        // Render the transaction table
+        async function renderTable() {
+            try {
+                const transactions = await fetchTransactions(currentUserId);
+                const searchTerm = document.getElementById('table-search').value.toLowerCase();
+                
+                // Filter transactions
+                const filteredTransactions = transactions
+                    .map((t, index) => ({ ...t, originalIndex: index }))
+                    .filter(t => 
+                        t.description.toLowerCase().includes(searchTerm) ||
+                        t.category.toLowerCase().includes(searchTerm)
+                    );
+
+                // Paginate results
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const paginatedTransactions = filteredTransactions.slice(start, end);
+
+                // Render table rows
+                const tableBody = document.getElementById('transactionTableBody');
+                tableBody.innerHTML = paginatedTransactions.map(t => `
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">${t.description}</td>
+                        <td class="px-6 py-4">
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    class="block w-full rounded-lg border border-gray-300 p-2 pr-10 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                    value="${t.category}"
+                                    oninput="showCategorySuggestions(this, ${t.originalIndex})"
+                                />
+                                <ul 
+                                    id="category-list-${t.originalIndex}" 
+                                    class="absolute z-10 mt-2 w-full bg-white shadow-lg rounded-lg border border-gray-200 overflow-hidden hidden"
+                                ></ul>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Update pagination info
+                document.getElementById('pagination-start').textContent = start + 1;
+                document.getElementById('pagination-end').textContent = Math.min(end, filteredTransactions.length);
+                document.getElementById('pagination-total').textContent = filteredTransactions.length;
+
+                // Update pagination buttons
+                document.getElementById('prevPage').disabled = currentPage === 1;
+                document.getElementById('nextPage').disabled = end >= filteredTransactions.length;
+
+            } catch (error) {
+                console.error('Error rendering table:', error);
+                alert('Failed to load transactions');
+            }
+        }
+
+        // Show category suggestions
+        async function showCategorySuggestions(inputElement, transactionIndex) {
+            const query = inputElement.value.toLowerCase();
+            const list = document.getElementById(`category-list-${transactionIndex}`);
+            const transactions = await fetchTransactions(currentUserId);
+            const categories = [...new Set(transactions.map(t => t.category))];
+
+            // Filter categories
+            const filteredCategories = categories.filter(c => 
+                c.toLowerCase().includes(query)
+            );
+
+            // Update suggestions
+            list.innerHTML = filteredCategories.map(c => `
+                <li class="px-4 py-2 cursor-pointer hover:bg-gray-100" 
+                    onclick="selectCategory(this, ${transactionIndex})">
+                    ${c}
+                </li>
+            `).join('');
+
+            // Show add new option if no matches
+            if (filteredCategories.length === 0 && query) {
+                list.innerHTML += `
+                    <li class="px-4 py-2 cursor-pointer text-blue-500 hover:bg-gray-100"
+                        onclick="addNewCategory('${inputElement.value}', ${transactionIndex})">
+                        Add "${inputElement.value}"
+                    </li>
+                `;
+            }
+
+            // Show/hide dropdown
+            list.classList.toggle('hidden', filteredCategories.length === 0 && !query);
+        }
+
+        // Select a category
+        function selectCategory(element, transactionIndex) {
+            const input = element.parentElement.previousElementSibling;
+            input.value = element.textContent.trim();
+            element.parentElement.classList.add('hidden');
+            updateChanges(transactionIndex, input.value);
+        }
+
+        // Add new category
+        function addNewCategory(category, transactionIndex) {
+            updateChanges(transactionIndex, category);
+            const input = document.querySelector(`#category-list-${transactionIndex}`).previousElementSibling;
+            input.value = category;
+            document.getElementById(`category-list-${transactionIndex}`).classList.add('hidden');
+        }
+
+        // Track changes
+        function updateChanges(transactionIndex, newCategory) {
+            changes[transactionIndex] = newCategory;
+        }
+
+        // Save all changes
+        async function saveAllChanges() {
+            try {
+                if (Object.keys(changes).length === 0) {
+                    alert('No changes to save!');
+                    return;
+                }
+
+                const updates = Object.entries(changes).map(([index, category]) => ({
+                    transactionIndex: parseInt(index),
+                    newCategory: category
+                }));
+
+                const response = await fetch('backend.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'bulkUpdate',
+                        userId: currentUserId,
+                        updates
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save changes');
+                }
+
+                changes = {};
+                await renderTable();
+                alert('Changes saved successfully!');
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                alert('Failed to save changes');
+            }
+        }
+
+        // Clean up description before prediction or training
+        function cleanDescription(description) {
+            // Remove amounts (e.g., 3,83 EUR or 40,00 EUR)
+            description = description.replace(/\d+([.,]\d+)?\s*EUR/g, '');
+
+            // Remove dates (e.g., 20.12.2024, 2024-12-20)
+            description = description.replace(/\d{1,4}[.\/-]\d{1,2}[.\/-]\d{1,4}/g, '');
+
+            // Remove times (e.g., 12:22:38, 12:22)
+            description = description.replace(/\d{1,2}:\d{1,2}(:\d{1,2})?/g, '');
+
+            // Remove specific keywords (case-insensitive)
+            description = description.replace(
+    /\b(EURO|EUR|Umsatz|um|Uhr|vom|MC|Hauptkarte|ECTL|NPIN|Zahlung|Auszahlung|Ihr|Einkauf|bei|REF|EREF:|MREF:|CRED:|IBAN:|BIC:)\b/gi, 
+    ''
+);
+
+            // Remove standalone numbers
+            description = description.replace(/\b\d+\b/g, '');
+
+            // Remove words ending with special characters :;,.-!?+*#
+            description = description.replace(/\b\w+[:;,.\-!?+*#]+\b/g, '');
+
+            // Remove patterns like /PP/. or /PP/
+            description = description.replace(/\/\w+\/\.?/g, '');
+
+            // Remove alone-standing special characters (e.g., ".", "//", "-", "!", "?", etc.)
+            description = description.replace(/\s*[\/\\.,\-!"§$%&/()=?*'+#_:;]+\s*/g, ' ').trim();
+
+            // Cleanup: Remove extra spaces and trim
+            description = description.replace(/\s+/g, ' ').trim();
+
+            return description;
+        }
+
+        // Predict category
+        async function predictCategory() {
+    try {
+        const description = cleanDescription(document.getElementById('description').value);
+        if (!description) {
+            alert('Please enter a transaction description');
+            return;
+        }
+
+        // Predict the category
+        const response = await fetch('backend.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'predict',
+                userId: currentUserId,
+                description
+            })
+        });
+
+        const result = await response.json();
+        document.getElementById('predictedCategory').textContent = result.category || 'Unknown';
+
+        // Fetch and display probabilities
+        const probabilitiesResponse = await fetch('backend.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'getProbabilities',
+                userId: currentUserId,
+                description
+            })
+        });
+
+        const probabilitiesResult = await probabilitiesResponse.json();
+        const probabilities = probabilitiesResult.probabilities;
+
+        // Convert probabilities to an array of [category, probability] pairs
+        const probabilitiesArray = Object.entries(probabilities);
+
+        // Sort the array by probability in descending order
+        probabilitiesArray.sort((a, b) => b[1] - a[1]);
+
+        // Generate HTML for the table
+        const tableHTML = `
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Category</th>
+                        <th scope="col" class="px-6 py-3">Probability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${probabilitiesArray.map(([category, probability]) => `
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">${category}</td>
+                            <td class="px-6 py-4">${probability.toFixed(2)}%</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+        // Display the table
+        document.getElementById('probabilities').innerHTML = tableHTML;
+    } catch (error) {
+        console.error('Error predicting category:', error);
+        alert('Failed to predict category');
+    }
+}
+
+        // Train model
+        async function trainModel() {
+            try {
+                const description = cleanDescription(document.getElementById('description').value);
+                const category = document.getElementById('correctCategory').value;
+
+                if (!description || !category) {
+                    alert('Please provide both description and category');
+                    return;
+                }
+
+                const response = await fetch('backend.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'train',
+                        userId: currentUserId,
+                        description,
+                        category
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Training failed');
+                }
+
+                await renderTable();
+                alert('Model trained successfully!');
+            } catch (error) {
+                console.error('Error training model:', error);
+                alert('Failed to train model');
+            }
+        }
+
+        // Retrain model
+        async function retrainModel() {
+            try {
+                const response = await fetch('backend.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'retrain',
+                        userId: currentUserId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Retraining failed');
+                }
+
+                alert('Model retrained successfully!');
+            } catch (error) {
+                console.error('Error retraining model:', error);
+                alert('Failed to retrain model');
+            }
+        }
+
+        // Pagination handlers
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            currentPage++;
+            renderTable();
+        });
+
+        // Search handler
+        document.getElementById('table-search').addEventListener('input', () => {
+            currentPage = 1;
+            renderTable();
+        });
+    </script>
+</body>
+</html>

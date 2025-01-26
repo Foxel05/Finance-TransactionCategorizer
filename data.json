@@ -1,0 +1,26 @@
+{
+    "users": {
+        "user1": {
+            "transactions": [
+                {
+                    "description": "Description",
+                    "category": "Category"
+                }
+            ],
+            "categories": [
+                "Category"
+            ]
+        },
+        "user2": {
+            "transactions": [
+                {
+                    "description": "Description",
+                    "category": "Category"
+                }
+            ],
+            "categories": [
+                "Category"
+            ]
+        }
+    }
+}
