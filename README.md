@@ -122,12 +122,14 @@ Categories are dynamically added based on user input. To predefine categories, m
 The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
 
 ## Contributing
+
 Contributions are welcome! If you'd like to contribute, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bugfix.
 3. Commit your changes and push to your fork.
 4. Submit a pull request with a detailed description of your changes.
+
 ---
 
 ## License
@@ -144,4 +146,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 ## Contact
+
 For questions or feedback, please open an issue on GitHub or contact the maintainer directly.
+
+**Happy categorizing!** 🚀
