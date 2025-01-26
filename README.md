@@ -110,16 +110,16 @@ finance-TransactionCategorizer/
 ## Customization
 
 ### Adding New Users
-  To add a new user, simply add an option to the <select> element in index.html:
+    To add a new user, simply add an option to the <select> element in index.html:
     ```
     <option value="user3">User 3</option>
     ```
 
 ### Customizing Categories
-Categories are dynamically added based on user input. To predefine categories, modify the initializeUser method in backend.php.
+    Categories are dynamically added based on user input. To predefine categories, modify the initializeUser method in backend.php.
 
 ### Modifying the Model
-The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
+    The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
 
 ---
 
