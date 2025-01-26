@@ -107,6 +107,8 @@ finance-TransactionCategorizer/
 └── composer.json           # Composer configuration file
 ```
 
+--- 
+
 ## Customization
 
 ### Adding New Users
