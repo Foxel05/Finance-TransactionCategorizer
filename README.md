@@ -111,9 +111,9 @@ finance-TransactionCategorizer/
 
 ### Adding New Users
   To add a new user, simply add an option to the <select> element in index.html:
-  ```
-  <option value="user3">User 3</option>
-  ```
+    ```
+    <option value="user3">User 3</option>
+    ```
 
 ### Customizing Categories
 Categories are dynamically added based on user input. To predefine categories, modify the initializeUser method in backend.php.
@@ -131,3 +131,22 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 2. Create a new branch for your feature or bugfix.
 3. Commit your changes and push to your fork.
 4. Submit a pull request with a detailed description of your changes.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- [Niiknow/Bayes](https://github.com/niiknow/bayes) for the Naive Bayes implementation.
+- [Tailwind CSS](https://tailwindcss.com/) and [Flowbite](https://flowbite.com/) for the frontend design.
+
+---
+
+## Contact
+
+For questions or feedback, please open an issue on GitHub or contact the maintainer directly.
