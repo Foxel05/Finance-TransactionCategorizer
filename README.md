@@ -121,6 +121,8 @@ Categories are dynamically added based on user input. To predefine categories, m
 ### Modifying the Model
 The Naive Bayes classifier can be customized by adjusting the tokenizer or adding additional preprocessing steps in the getCustomTokenizer method.
 
+---
+
 ## Contributing
 
 Contributions are welcome! If you'd like to contribute, please follow these steps:
